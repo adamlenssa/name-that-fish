@@ -21,22 +21,20 @@ export const initialFishes = [
   },
 ];
 
-function check(userGuess, numbers, method) {
+function updateScores(userGuess, numbers, method) {
   if (userGuess == initialFishes[0].name) {
     method({
       correctCount: numbers.correctCount + 1,
       incorrectCount: numbers.incorrectCount,
     });
-    console.log(numbers);
   } else {
     method({
       correctCount: numbers.correctCount,
       incorrectCount: numbers.incorrectCount + 1,
     });
-    console.log(numbers);
   }
 }
-export function FunctionalGameBoard({ numbers, handleUserScore }) {
+export function FunctionalGameBoard({ scores, handleUserScore }) {
   const [userGuess, setUserGuess] = useState("");
   const nextFishToName = initialFishes[0];
   return (
@@ -49,7 +47,7 @@ export function FunctionalGameBoard({ numbers, handleUserScore }) {
         onSubmit={(e) => {
           e.preventDefault();
           setUserGuess("");
-          check(userGuess, numbers, handleUserScore);
+          updateScores(userGuess, scores, handleUserScore);
           initialFishes.splice(0, 1);
         }}
       >

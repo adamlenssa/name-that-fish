@@ -8,14 +8,21 @@ export class ClassApp extends Component {
     incorrectCount: 0,
     correctCount: 0,
   };
+  handleUserScore = (data) =>
+    this.setState({
+      data,
+    });
   render() {
     return (
       <>
         <>
-          <ClassScoreBoard />
-          <ClassGameBoard />
+          <ClassScoreBoard scores={this.state} />
+          <ClassGameBoard
+            scores={this.state}
+            handleUserScore={this.handleUserScore}
+          />
         </>
-        {false && <ClassFinalScore />}
+        {false && <ClassFinalScore scores={this.state} />}
       </>
     );
   }

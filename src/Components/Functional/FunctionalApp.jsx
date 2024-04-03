@@ -4,14 +4,18 @@ import { FunctionalFinalScore } from "./FunctionalFinalScore";
 import { useState } from "react";
 
 export function FunctionalApp() {
-  const [userGuess, setUserGuess] = useState({ guess: "" });
   const [score, setScore] = useState({ correctCount: 0, incorrectCount: 0 });
   return (
     <>
-      {false && <FunctionalFinalScore />}
-      <FunctionalScoreBoard scores={score} />
-      <FunctionalGameBoard numbers={score} handleUserScore={setScore} />
-      {/* {console.log()} */}
+      {score.correctCount + score.incorrectCount === 4 && (
+        <FunctionalFinalScore scores={score} />
+      )}
+      {score.correctCount + score.incorrectCount !== 4 && (
+        <>
+          <FunctionalScoreBoard scores={score} />
+          <FunctionalGameBoard scores={score} handleUserScore={setScore} />
+        </>
+      )}
     </>
   );
 }

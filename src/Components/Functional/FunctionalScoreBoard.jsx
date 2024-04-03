@@ -5,8 +5,6 @@ import { initialFishes } from "./FunctionalGameBoard";
 
 const answersLeft = ["trout", "salmon", "tuna", "shark"];
 export function FunctionalScoreBoard({ scores }) {
-  console.log(scores);
-
   return (
     <div id="score-board">
       <div>Incorrect 🔻: {scores.incorrectCount}</div>
