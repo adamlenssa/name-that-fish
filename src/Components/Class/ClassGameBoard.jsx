@@ -1,59 +1,23 @@
 import { Component } from "react";
 import "./styles/game-board.css";
-import { Images } from "../../assets/Images";
+import { initialFishes } from "../../constants/data";
+import { answersLeft } from "./ClassScoreBoard";
 
-const initialFishes = [
-  {
-    name: "trout",
-    url: Images.trout,
-  },
-  {
-    name: "salmon",
-    url: Images.salmon,
-  },
-  {
-    name: "tuna",
-    url: Images.tuna,
-  },
-  {
-    name: "shark",
-    url: Images.shark,
-  },
-];
-function updateScores(userGuess, numbers, method) {
-  if (userGuess == initialFishes[0].name) {
-    method({
-      incorrectCount: numbers.incorrectCount,
-      correctCount: numbers.correctCount + 1,
-    });
-  } else {
-    method({
-      incorrectCount: numbers.incorrectCount + 1,
-      correctCount: numbers.correctCount,
-    });
-  }
-}
 export class ClassGameBoard extends Component {
   state = {
     userGuess: "",
   };
-  updateScores(userGuess, scores, method) {
-    if (userGuess == initialFishes[0].name) {
-      method({
-        incorrectCount: scores.incorrectCount,
-        correctCount: scores.correctCount + 1,
-      });
-    } else {
-      method({
-        incorrectCount: scores.incorrectCount + 1,
-        correctCount: scores.correctCount,
-      });
-    }
+  updateScores(userGuess, scores, currentFish) {
+    const params = userGuess == currentFish ? [1, 0] : [0, 1];
+    return {
+      incorrectCount: scores.incorrectCount + params[1],
+      correctCount: scores.correctCount + params[0],
+    };
   }
   render() {
-    const nextFishToName = initialFishes[0];
-    const { scores } = this.props;
-    console.log(this.props.handleUserScore);
+    const { scores, handleUserScore } = this.props;
+    const index = scores.correctCount + scores.incorrectCount;
+    const nextFishToName = initialFishes[index];
     return (
       <div id="game-board">
         <div id="fish-container">
@@ -63,13 +27,17 @@ export class ClassGameBoard extends Component {
           id="fish-guess-form"
           onSubmit={(e) => {
             e.preventDefault();
-            this.setState({ userGuess: "" });
-            this.props.updateScores(
+            const newScore = this.updateScores(
               this.state.userGuess,
               scores,
-              this.handleUserScore(scores)
+              nextFishToName.name
             );
-            initialFishes.splice(0, 1);
+            this.setState({ userGuess: "" });
+            handleUserScore({
+              correctCount: newScore.correctCount,
+              incorrectCount: newScore.incorrectCount,
+            });
+            answersLeft.splice(0, 1);
           }}
         >
           <label htmlFor="fish-guess">What kind of fish is this?</label>

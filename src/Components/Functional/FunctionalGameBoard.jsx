@@ -1,42 +1,20 @@
-import "./styles/game-board.css";
-import { Images } from "../../assets/Images";
 import { useState } from "react";
+import "./styles/game-board.css";
 
-export const initialFishes = [
-  {
-    name: "trout",
-    url: Images.trout,
-  },
-  {
-    name: "salmon",
-    url: Images.salmon,
-  },
-  {
-    name: "tuna",
-    url: Images.tuna,
-  },
-  {
-    name: "shark",
-    url: Images.shark,
-  },
-];
+import { initialFishes } from "../../constants/data";
+import { answersLeft } from "./FunctionalScoreBoard";
 
-function updateScores(userGuess, numbers, method) {
-  if (userGuess == initialFishes[0].name) {
-    method({
-      correctCount: numbers.correctCount + 1,
-      incorrectCount: numbers.incorrectCount,
-    });
-  } else {
-    method({
-      correctCount: numbers.correctCount,
-      incorrectCount: numbers.incorrectCount + 1,
-    });
-  }
-}
 export function FunctionalGameBoard({ scores, handleUserScore }) {
   const [userGuess, setUserGuess] = useState("");
-  const nextFishToName = initialFishes[0];
+  const index = scores.correctCount + scores.incorrectCount;
+  const nextFishToName = initialFishes[index];
+  function updateScores(userGuess, numbers, method, currentFish) {
+    const params = userGuess == currentFish.name ? [1, 0] : [0, 1];
+    method({
+      correctCount: numbers.correctCount + params[0],
+      incorrectCount: numbers.incorrectCount + params[1],
+    });
+  }
   return (
     <div id="game-board">
       <div id="fish-container">
@@ -47,8 +25,8 @@ export function FunctionalGameBoard({ scores, handleUserScore }) {
         onSubmit={(e) => {
           e.preventDefault();
           setUserGuess("");
-          updateScores(userGuess, scores, handleUserScore);
-          initialFishes.splice(0, 1);
+          updateScores(userGuess, scores, handleUserScore, nextFishToName);
+          answersLeft.splice(0, 1);
         }}
       >
         <label htmlFor="fish-guess">What kind of fish is this?</label>

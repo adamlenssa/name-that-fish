@@ -1,16 +1,14 @@
 import { Component } from "react";
 
-const totalCount = 0;
-const correctCount = 0;
-
 export class ClassFinalScore extends Component {
   render() {
-    const { score } = this.props;
+    const { scores } = this.props;
+    const totalCount = scores.correctCount + scores.incorrectCount;
     return (
       <div id="final-score">
         <h1>Your Final Score Was</h1>
         <div id="score">
-          <p>{correctCount}</p>
+          <p>{scores.correctCount}</p>
           <hr />
           <p>{totalCount}</p>
         </div>

@@ -1,16 +1,22 @@
+import { useState } from "react";
 import { FunctionalGameBoard } from "./FunctionalGameBoard";
 import { FunctionalScoreBoard } from "./FunctionalScoreBoard";
 import { FunctionalFinalScore } from "./FunctionalFinalScore";
-import { useState } from "react";
+import { initialFishes } from "../../constants/data";
 
 export function FunctionalApp() {
   const [score, setScore] = useState({ correctCount: 0, incorrectCount: 0 });
+  const fishIndex = score.correctCount + score.incorrectCount;
+  const isGameOver = fishIndex === initialFishes.length;
   return (
     <>
-      {score.correctCount + score.incorrectCount === 4 && (
-        <FunctionalFinalScore scores={score} />
+      {isGameOver && (
+        <FunctionalFinalScore
+          correctCount={score.correctCount}
+          totalCount={score.correctCount + score.incorrectCount}
+        />
       )}
-      {score.correctCount + score.incorrectCount !== 4 && (
+      {!isGameOver && (
         <>
           <FunctionalScoreBoard scores={score} />
           <FunctionalGameBoard scores={score} handleUserScore={setScore} />
